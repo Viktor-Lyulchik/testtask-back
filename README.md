@@ -8,7 +8,8 @@ NestJS REST API for the InvestEstate real estate investment platform.
 - **Prisma** — ORM
 - **PostgreSQL** — database
 - **JWT** — access tokens (15m) via `@nestjs/jwt` + `passport-jwt`
-- **Refresh tokens** — opaque tokens (30d), stored hashed in DB, single-use rotation
+- **Refresh tokens** — opaque tokens (30d), stored hashed in DB, single-use
+  rotation
 - **bcrypt** — password hashing
 - **Cloudinary** — property image uploads
 - **Swagger** — API docs at `/docs`
@@ -35,13 +36,7 @@ cp .env.example .env
 npx prisma migrate dev
 ```
 
-### 4. (Optional) Seed the database
-
-```bash
-npx prisma db seed
-```
-
-### 5. Start the server
+### 4. Start the server
 
 ```bash
 npm run dev          # development with watch
@@ -68,8 +63,10 @@ POST /auth/logout-all  (Bearer token)     # invalidate all devices
 ```
 
 **Refresh token security:**
+
 - Stored as SHA-256 hash in DB — plain text never persisted
-- **Single-use rotation** — each `POST /auth/refresh` invalidates the used token and issues a fresh pair
+- **Single-use rotation** — each `POST /auth/refresh` invalidates the used token
+  and issues a fresh pair
 - `onDelete: Cascade` — all tokens deleted when user is deleted
 - Expired tokens are cleaned up automatically on each login/refresh
 
@@ -79,29 +76,29 @@ POST /auth/logout-all  (Bearer token)     # invalidate all devices
 
 ### Auth
 
-| Method | Path | Auth | Rate limit | Description |
-|--------|------|------|------------|-------------|
-| `POST` | `/auth/register` | — | 5/min | Register, returns token pair |
-| `POST` | `/auth/login` | — | 10/min | Login, returns token pair |
-| `POST` | `/auth/refresh` | — | 20/min | Rotate refresh token |
-| `POST` | `/auth/logout` | — | — | Invalidate refresh token |
-| `POST` | `/auth/logout-all` | JWT | — | Invalidate all refresh tokens |
-| `GET` | `/auth/me` | JWT | — | Get current user from DB |
+| Method | Path               | Auth | Rate limit | Description                   |
+| ------ | ------------------ | ---- | ---------- | ----------------------------- |
+| `POST` | `/auth/register`   | —    | 5/min      | Register, returns token pair  |
+| `POST` | `/auth/login`      | —    | 10/min     | Login, returns token pair     |
+| `POST` | `/auth/refresh`    | —    | 20/min     | Rotate refresh token          |
+| `POST` | `/auth/logout`     | —    | —          | Invalidate refresh token      |
+| `POST` | `/auth/logout-all` | JWT  | —          | Invalidate all refresh tokens |
+| `GET`  | `/auth/me`         | JWT  | —          | Get current user from DB      |
 
 ### Properties
 
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| `GET` | `/properties` | — | List all (public) |
+| Method | Path          | Auth        | Description              |
+| ------ | ------------- | ----------- | ------------------------ |
+| `GET`  | `/properties` | —           | List all (public)        |
 | `POST` | `/properties` | JWT + ADMIN | Create with image upload |
 
 ### Applications
 
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| `POST` | `/applications` | JWT | Submit application |
-| `GET` | `/applications` | JWT | My applications |
-| `DELETE` | `/applications/:id` | JWT | Cancel my application |
+| Method   | Path                | Auth | Description           |
+| -------- | ------------------- | ---- | --------------------- |
+| `POST`   | `/applications`     | JWT  | Submit application    |
+| `GET`    | `/applications`     | JWT  | My applications       |
+| `DELETE` | `/applications/:id` | JWT  | Cancel my application |
 
 ---
 
