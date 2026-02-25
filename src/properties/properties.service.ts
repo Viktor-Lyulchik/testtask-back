@@ -8,7 +8,7 @@ export class PropertiesService {
 
   async findAll() {
     return this.prisma.property.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'asc' },
     });
   }
 
